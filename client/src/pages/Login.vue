@@ -4,6 +4,13 @@ import { useRoute, useRouter } from 'vue-router'
 import { useNotice } from '../hooks/useNotice.js'
 import { useUserStore } from '../stores/UserStore.js'
 
+const DEMO_DATA = [
+    { email: 'test1@test.test', password: 'test' },
+    { email: 'test2@test.test', password: 'test' },
+    { email: 'test3@test.test', password: 'test' },
+    { email: 'test4@test.test', password: 'test' },
+]
+
 const isRegistration = ref(true)
 const emailEl = ref()
 const formData = reactive({})
@@ -49,6 +56,11 @@ watch(() => route.query.registration,val => {
                 size="large"
             >
                 <h1 class="text-h1">{{ !isRegistration ? 'Authorization' : 'Registration' }}</h1>
+
+                <el-table :data="DEMO_DATA">
+                    <el-table-column prop="email" label="Email"/>
+                    <el-table-column prop="password" label="Password"/>
+                </el-table>
 
                 <el-form-item
                     v-if="isRegistration"
@@ -106,6 +118,10 @@ watch(() => route.query.registration,val => {
 
 <style lang="scss" scoped>
 @import '../assets/styles/variables';
+
+.el-table {
+    margin-bottom: 24px;
+}
 
 .login-image {
     opacity: 0.7;
@@ -165,6 +181,16 @@ watch(() => route.query.registration,val => {
     &__form-card {
         max-width: calc(#{$max-width} / 2.5);
         width: calc(#{$max-width} / 2.5);
+
+        & > *:not(:last-child) {
+            margin-bottom: 24px;
+        }
+
+        &__footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
     }
 }
 </style>

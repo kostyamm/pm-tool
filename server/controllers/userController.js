@@ -15,6 +15,8 @@ const generateJwt = (id, email, name) => {
 const registration = async (req, res, next) => {
     const { email, password, name } = req.body
 
+    return next(ApiError.badRequest('Registration disabled for demo deployment'))
+
     if (!email || !password || !name) {
         return next(ApiError.badRequest('All fields are required'))
     }
