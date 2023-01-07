@@ -1,0 +1,109 @@
+@import '../variables';
+
+.base-button-svg {
+  position: absolute;
+  top: 4px;
+  font-size: 9px;
+}
+
+.base-button-large-svg {
+  position: absolute;
+  top: 8px;
+  font-size: 10px;
+}
+
+button {
+  font-family: 'Montserrat', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 12px;
+  text-transform: uppercase;
+  background: $gradient;
+  padding: 9px 15px;
+
+  border: none;
+  border-radius: $border-radius;
+
+  color: $white;
+  cursor: pointer;
+  white-space: nowrap;
+
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  &.button-icon-left {
+    padding-left: 36px;
+
+    svg:first-child {
+      @extend .base-button-svg;
+
+      left: 8px;
+    }
+  }
+
+  &.button-icon-right {
+    padding-right: 36px;
+
+    svg:last-child {
+      @extend .base-button-svg;
+
+      right: 8px;
+    }
+  }
+
+  &.button-large {
+    border: none;
+    padding: 14px 20px;
+
+    &.button-icon-left {
+      padding-left: 46px;
+
+      svg {
+        @extend .base-button-large-svg;
+
+        left: 15px;
+      }
+    }
+
+    &.button-icon-right {
+      padding-right: 46px;
+
+      svg {
+        @extend .base-button-large-svg;
+
+        right: 15px;
+      }
+    }
+  }
+
+  &.outline {
+    background: transparent;
+    position: relative;
+
+    &:after {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      content: ' ';
+      border: 1px solid $white;
+      border-radius: $border-radius;
+    }
+
+    &:hover {
+      box-shadow: 0 0 14px -8px $white;
+    }
+  }
+
+  &[disabled] {
+    background: $grey-b;
+    opacity: 0.5;
+  }
+
+  &:hover {
+    box-shadow: 0 0 14px -8px $primary;
+  }
+}

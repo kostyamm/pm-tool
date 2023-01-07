@@ -1,0 +1,30 @@
+@import 'ui/button';
+@import 'ui/link';
+
+@import 'scrollbar';
+@import 'variables';
+@import 'typography';
+@import 'common';
+
+body {
+  font-family: Montserrat, Inter, Avenir, Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+
+  color: $white;
+  background-color: $dark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  //-webkit-font-smoothing: antialiased;
+  //-moz-osx-font-smoothing: grayscale;
+  //-webkit-text-size-adjust: 100%;
+}

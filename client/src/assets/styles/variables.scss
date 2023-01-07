@@ -1,0 +1,27 @@
+$white: rgba(255, 255, 255, 0.9);
+$black: rgba(48, 54, 61, 0.9);
+$grey: #F2F4F7;
+$grey-c: #CBCFD4;
+$grey-b: #747D88;
+$grey-a: #3C444C;
+
+$dark: #30363D;
+$error: #CF6F8A;
+$primary: #F27A54;
+$secondary: #A154F2;
+$tertiary: #6FCF97;
+
+$box-shadow: 0 30px 40px rgba(0, 0, 0, 0.1);
+$gradient: linear-gradient(90deg, $primary 0%, $secondary 100%);
+$border-radius: 20px;
+$border-radius-small: 3px;
+
+$header-footer-height: 80px;
+$content-height: calc(100vh - (#{$header-footer-height} * 2));
+$opacity-background: rgba(66, 70, 79, 0.6);
+
+$max-width: 1280px;
+
+$screen-mobile: 'screen and (max-width: 600px)';
+$screen-tablet: 'screen and (max-width: 960px)';
+$screen-desktop: 'screen and (max-width: 1280px)';

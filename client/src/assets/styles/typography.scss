@@ -1,0 +1,40 @@
+@mixin init-font ($font-family, $font-property, $size, $height, $font-style: normal, $color: $white) {
+  font-family: $font-family, $font-property;
+  font-style: $font-style;
+  font-weight: 400;
+  font-size: $size;
+  line-height: $height;
+
+  margin: 0;
+  color: $color;
+}
+
+.text-h1 {
+  @include init-font('Zilla Slab', serif, 44px, 56px);
+}
+
+.text-h2 {
+  @include init-font('Zilla Slab', serif, 32px, 36px);
+}
+
+.text-h3 {
+  @include init-font('Zilla Slab', serif, 24px, 28px);
+}
+
+.text-h4 {
+  @include init-font('Zilla Slab', serif, 19px, 24px, normal, $grey-c);
+}
+
+.text-h5 {
+  @include init-font('Zilla Slab', serif, 17px, 22px, italic);
+}
+
+.text-p {
+  @include init-font('Montserrat', sans-serif, 14px, 22px, normal, $grey-c);
+}
+
+.text-h6 {
+  @include init-font('Montserrat', sans-serif, 10px, 18px);
+
+  text-transform: uppercase;
+}
