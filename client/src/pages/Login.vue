@@ -55,6 +55,17 @@ export default {
         <div class="login__form">
             <h1>{{ isAuthForm ? 'Authorization' : 'Registration' }}</h1>
 
+            <table>
+                <thead>
+                <tr><td><h4 class="text-h4">Test accounts:</h4></td></tr>
+                </thead>
+                <tr><td>Email</td><td>Password</td></tr>
+                <tr><td>test1@test.test</td><td>test</td></tr>
+                <tr><td>test2@test.test</td><td>test</td></tr>
+                <tr><td>test3@test.test</td><td>test</td></tr>
+                <tr><td>test4@test.test</td><td>test</td></tr>
+            </table>
+
             <Field v-if="!isAuthForm"
                    v-model="formData.name"
                    label="name"
