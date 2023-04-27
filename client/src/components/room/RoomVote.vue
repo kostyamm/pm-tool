@@ -1,77 +1,64 @@
-<script>
-import { computed } from 'vue'
+<script setup>
+import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 
-export default {
-    name: "RoomVote",
-    emits: ['onVote'],
-    setup(props, { emit }) {
-        const VOTE_VALUES = [0.5, 1, 2, 3, 5, 7]
-        const store = useStore()
+const emit = defineEmits(['onVote'])
 
-        const tasks = computed(() => store.getters['room/tasks'])
+const VOTE_VALUES = [0.5, 1, 2, 3, 5, 7]
+const store = useStore()
 
-        const isEndVoting = computed(() => tasks.value.every(({ vote }) => vote))
-        const isEmptyTasks = computed(() => !tasks.value.length)
+const vote = ref(null)
 
-        const onVote = (vote) => emit('onVote', vote)
+const tasks = computed(() => store.getters['room/tasks'])
 
-        return { VOTE_VALUES, onVote, isEndVoting, isEmptyTasks }
-    },
+const isEndVoting = computed(() => tasks.value.every(({ vote }) => vote))
+const isEmptyTasks = computed(() => !tasks.value.length)
+const currentTask = computed(() => tasks.value.find(({ active }) => active))
+
+watch(() => currentTask.value, (value, oldValue) => {
+    if (value?.url === oldValue?.url) {
+        return
+    }
+
+    vote.value = null
+}, { deep: true })
+
+const onVote = (value) => {
+    vote.value = value
+    emit('onVote', value)
 }
 </script>
 
 <template>
-    <div class="room-vote">
-        <h2 v-if="!isEmptyTasks && !isEndVoting" class="text-h2">Estimate in days</h2>
-        <h2 v-else-if="isEmptyTasks" class="text-h2">Task list is empty</h2>
-        <h2 v-else class="text-h2">Estimation completed</h2>
-        <div v-if="!isEmptyTasks && !isEndVoting" class="room-vote__cards">
-            <div
-                v-for="item in VOTE_VALUES"
-                :key="item"
-                class="room-vote__cards__item"
+    <h2 v-if="!isEmptyTasks && !isEndVoting" class="text-h2">Estimate in days</h2>
+    <h2 v-else-if="isEmptyTasks" class="text-h2">Task list is empty</h2>
+    <h2 v-else class="text-h2">Estimation completed</h2>
+
+    <el-row v-if="!isEmptyTasks && !isEndVoting" :gutter="12">
+        <el-col
+            v-for="item in VOTE_VALUES"
+            :key="item"
+            :span="24 / VOTE_VALUES.length"
+        >
+            <el-button
                 @click="onVote(item)"
-            >{{ item }}
-            </div>
-        </div>
-    </div>
+                :type="vote === item ? 'success' : 'info'"
+            >
+                {{ item }}
+            </el-button>
+        </el-col>
+    </el-row>
+    <el-divider />
 </template>
 
 <style lang="scss" scoped>
-@import "../../assets/styles/variables";
-@import "../../assets/styles/variables-room";
+h2 {
+    text-align: center;
+}
 
-.room-vote {
-    min-height: $room-vote-height;
-    max-height: $room-vote-height;
-
-    h2 {
-        text-align: center;
-        padding-top: 12px;
-    }
-
-    &__cards {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 12px 0;
-
-        &__item {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex: 1;
-
-            height: 120px;
-            border: 1px solid $white;
-            border-radius: $border-radius;
-            cursor: pointer;
-
-            &:not(:last-child) {
-                margin-right: 10px;
-            }
-        }
-    }
+.el-button {
+    width: 100%;
+    height: 100px;
+    margin-top: 12px;
 }
 </style>

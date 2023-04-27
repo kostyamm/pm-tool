@@ -1,26 +1,18 @@
-<script>
+<script setup>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 
-export default {
-    name: "index",
-    setup () {
-        const store = useStore()
-        const user = computed(() => store.getters['user/user'])
-
-        return { user }
-    }
-}
+const store = useStore()
+const user = computed(() => store.getters['user/user'])
 </script>
 
 <template>
-    <h1 class="text-h1">{{user.name}}</h1>
-    <p class="text-p"><strong>Email:</strong> {{user.email}}</p>
-    <p class="text-p"><strong>ID:</strong> {{user.id}}</p>
+    <el-descriptions
+        :title="user.name"
+        :column="1"
+        border
+    >
+        <el-descriptions-item label="ID">{{ user.id }}</el-descriptions-item>
+        <el-descriptions-item label="Email">{{ user.email }}</el-descriptions-item>
+    </el-descriptions>
 </template>
-
-<style lang="scss" scoped>
-.user {
-
-}
-</style>

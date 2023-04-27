@@ -16,10 +16,12 @@ $gradient: linear-gradient(90deg, $primary 0%, $secondary 100%);
 $border-radius: 20px;
 $border-radius-small: 3px;
 
-$header-footer-height: 80px;
-$content-height: calc(100vh - (#{$header-footer-height} * 2));
+$header-height: 59px;
+$footer-height: 60px;
+$content-height: calc(100vh - $header-height - $footer-height);
 $opacity-background: rgba(66, 70, 79, 0.6);
 
+$min-width: 320px;
 $max-width: 1280px;
 
 $screen-mobile: 'screen and (max-width: 600px)';

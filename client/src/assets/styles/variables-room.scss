@@ -1,5 +1,0 @@
-@import "variables";
-
-$room-vote-height: 194px;
-$room-chat-footer-height: 64px;
-$room-chat-messages-height: calc(#{$content-height} - #{$room-vote-height} - #{$room-chat-footer-height})

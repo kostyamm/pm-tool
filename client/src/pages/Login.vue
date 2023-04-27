@@ -1,99 +1,107 @@
-<script>
+<script setup>
 import { reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useNotice } from '../hooks/useNotice.js'
-import Field from '../components/UI/Field.vue'
 
-export default {
-    name: 'Login',
-    components: { Field },
-    setup() {
-        const isAuthForm = ref(true)
-        const emailEl = ref()
-        const formData = reactive({})
+const isRegistration = ref(true)
+const emailEl = ref()
+const formData = reactive({})
 
-        const { errorNotice } = useNotice()
-        const store = useStore()
-        const route = useRoute()
-        const router = useRouter()
+const { errorNotice } = useNotice()
+const store = useStore()
+const route = useRoute()
+const router = useRouter()
 
-        watch(() => route.query.registration, val => {
-            isAuthForm.value = val !== 'true'
+const submit = async () => {
+    const { confirmPassword, ...userData } = formData
+    const password = userData.password
+    const isInvalidPassword = !password || !confirmPassword || password !== confirmPassword
 
-            if (isAuthForm.value) {
-                emailEl.value?.childRef.focus()
-            }
+    const requestType = !isRegistration.value ? 'signIn' : 'signUp'
 
-        }, { immediate: true })
+    if (isRegistration.value && isInvalidPassword) {
+        return errorNotice({ message: 'Password or password confirmation is invalid' })
+    }
 
-        const submit = async () => {
-            const { confirmPassword, ...userData } = formData
-            const password = userData.password
-            const isInvalidPassword = !password || !confirmPassword || password !== confirmPassword
+    const result = await store.dispatch(`user/${requestType}`, userData)
 
-            const requestType = isAuthForm.value ? 'signIn' : 'signUp'
-
-            if (!isAuthForm.value && isInvalidPassword) {
-                return errorNotice({ message: 'Password or password confirmation is invalid' })
-            }
-
-            const result = await store.dispatch(`user/${requestType}`, userData)
-
-            if (result) {
-                router.push(route.query.to || '/')
-            }
-        }
-
-        return { emailEl, formData, isAuthForm, submit }
-    },
+    if (result) {
+        router.push(route.query.to || '/')
+    }
 }
+
+watch(() => route.query.registration,val => {
+    isRegistration.value = !!(val && JSON.parse(val))
+
+    if (isRegistration.value) {
+        return
+    }
+    emailEl.value?.focus()
+}, { immediate: true })
 </script>
 
 <template>
     <div class="login">
-        <div class="login__form">
-            <h1>{{ isAuthForm ? 'Authorization' : 'Registration' }}</h1>
+        <el-card class="login__form-card">
+            <el-form
+                :model="formData"
+                label-position="top"
+                size="large"
+            >
+                <h1 class="text-h1">{{ !isRegistration ? 'Authorization' : 'Registration' }}</h1>
 
-            <Field v-if="!isAuthForm"
-                   v-model="formData.name"
-                   label="name"
-                   ref="name"
-                   required
-                   placeholder="Enter name..."
-                   @keypress.enter="submit" />
-            <Field ref="emailEl"
-                   v-model="formData.email"
-                   label="email"
-                   required
-                   placeholder="Enter email..."
-                   @keypress.enter="submit" />
-            <Field label="password"
-                   v-model="formData.password"
-                   required
-                   placeholder="Enter password..."
-                   @keypress.enter="submit"
-                   type="password" />
-            <Field v-if="!isAuthForm"
-                   label="confirm password"
-                   v-model="formData.confirmPassword"
-                   required
-                   placeholder="Enter password..."
-                   @keypress.enter="submit"
-                   type="password" />
+                <el-form-item
+                    v-if="isRegistration"
+                    required
+                    label="Name"
+                    @keypress.enter="submit"
+                >
+                    <el-input v-model="formData.name" placeholder="Your name" />
+                </el-form-item>
+                <el-form-item
+                    required
+                    label="Email"
+                    type="email"
+                    @keypress.enter="submit"
+                >
+                    <el-input ref="emailEl" v-model="formData.email" placeholder="Your email" type="email" />
+                </el-form-item>
+                <el-form-item
+                    required
+                    label="Password"
+                    @keypress.enter="submit"
+                >
+                    <el-input
+                        v-model="formData.password"
+                        placeholder="Your password"
+                        type="password"
+                        show-password
+                    />
+                </el-form-item>
+                <el-form-item
+                    v-if="isRegistration"
+                    required
+                    label="Confirm password"
+                    @keypress.enter="submit"
+                >
+                    <el-input
+                        v-model="formData.confirmPassword"
+                        placeholder="Your password"
+                        type="password"
+                        show-password
+                    />
+                </el-form-item>
 
-            <div class="login__form__footer">
-                <div>
-                    Go to
-                    <a @click="isAuthForm = !isAuthForm">{{ isAuthForm ? 'Registration' : 'Authorization' }}</a>
-                </div>
+                <el-row align="middle" justify="space-between">
+                    <el-button link @click="isRegistration = !isRegistration">
+                        Go to {{ !isRegistration ? 'Registration' : 'Authorization' }}
+                    </el-button>
+                    <el-button @click="submit">Sign in</el-button>
+                </el-row>
+            </el-form>
+        </el-card>
 
-                <button @click="submit" class="button-large button-icon-right">
-                    Sign in
-                    <mdi-chevron-right />
-                </button>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -102,11 +110,11 @@ export default {
 
 .login-image {
     opacity: 0.7;
-    position: absolute;
+    position: fixed;
     content: ' ';
     z-index: -10;
     height: 50vh;
-    width: 100vw;
+    width: $max-width;
     display: inline-block;
     background-size: contain;
     background-repeat: no-repeat;
@@ -116,6 +124,7 @@ export default {
     position: relative;
     display: flex;
     justify-content: center;
+    align-items: center;
     height: $content-height;
 
     &::after {
@@ -154,25 +163,9 @@ export default {
         }
     }
 
-    &__form {
-        position: relative;
-        z-index: 20;
-        padding-bottom: 80px;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
+    &__form-card {
         max-width: calc(#{$max-width} / 2.5);
         width: calc(#{$max-width} / 2.5);
-
-        & > *:not(:last-child) {
-            margin-bottom: 24px;
-        }
-
-        &__footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
     }
 }
 </style>

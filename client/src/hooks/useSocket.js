@@ -23,7 +23,7 @@ export const useSocket = (roomId) => {
     const emitSkipTask = () => socket.emit('skipTask')
     const emitMessage = message => socket.emit('message', message)
 
-    const socketDisconnect = () => socket.disconnect()
+    const disconnectSocket = () => socket.disconnect()
 
-    return { emitVote, emitTask, emitSkipTask, emitMessage, socketDisconnect }
+    return { emitVote, emitTask, emitSkipTask, emitMessage, disconnectSocket }
 }

@@ -1,39 +1,25 @@
-<script>
+<script setup>
 import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 
-export default {
-    name: "RoomChatMessages",
-    setup() {
-        const store = useStore()
+const store = useStore()
 
-        const messageEl = ref()
+const messageEl = ref()
 
-        const user = computed(() => store.getters['user/user'])
-        const messages = computed(() => store.getters['room/messages'])
+const user = computed(() => store.getters['user/user'])
+const messages = computed(() => store.getters['room/messages'])
 
-        watch(() => messages,
-            () => {
-                setTimeout(() => {
-                    if (!messageEl.value) {
-                        return
-                    }
-
-                    const messages = messageEl.value
-                    const lastIndex = messages.length - 1
-                    messages[lastIndex]?.scrollIntoView({ behavior: "smooth" })
-                })
-            },
-            { deep: true, immediate: true },
-        )
-
-        return {
-            user,
-            messages,
-            messageEl,
+watch(() => messages, () => {
+    setTimeout(() => {
+        if (!messageEl.value) {
+            return
         }
-    },
-}
+
+        const messages = messageEl.value
+        const lastIndex = messages.length - 1
+        messages[lastIndex]?.scrollIntoView({ behavior: "smooth" })
+    })
+}, { deep: true, immediate: true })
 </script>
 
 <template>
@@ -58,8 +44,17 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/styles/variables.scss';
-@import '../../assets/styles/transitions.scss';
-@import '../../assets/styles/variables-room.scss';
+
+.list-enter-active,
+.list-leave-active {
+    transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateY(20px);
+}
 
 .base-message {
     min-width: 160px;
@@ -82,11 +77,8 @@ export default {
 
 .messages {
     border-radius: $border-radius;
-    height: $room-chat-messages-height;
-    max-height: $room-chat-messages-height;
-    overflow-y: auto;
-    overflow-x: hidden;
     padding: 0 16px;
+    margin-bottom: 12px;
 
     &__item {
         @extend .base-message;

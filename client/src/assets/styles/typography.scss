@@ -1,4 +1,4 @@
-@mixin init-font ($font-family, $font-property, $size, $height, $font-style: normal, $color: $white) {
+@mixin init-font ($font-family, $font-property, $size, $height, $font-style: normal) {
   font-family: $font-family, $font-property;
   font-style: $font-style;
   font-weight: 400;
@@ -6,7 +6,6 @@
   line-height: $height;
 
   margin: 0;
-  color: $color;
 }
 
 .text-h1 {
@@ -22,7 +21,7 @@
 }
 
 .text-h4 {
-  @include init-font('Zilla Slab', serif, 19px, 24px, normal, $grey-c);
+  @include init-font('Zilla Slab', serif, 19px, 24px, normal);
 }
 
 .text-h5 {
@@ -30,7 +29,7 @@
 }
 
 .text-p {
-  @include init-font('Montserrat', sans-serif, 14px, 22px, normal, $grey-c);
+  @include init-font('Montserrat', sans-serif, 14px, 22px, normal);
 }
 
 .text-h6 {

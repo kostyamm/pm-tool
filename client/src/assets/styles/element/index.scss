@@ -1,0 +1,27 @@
+// to edit light theme
+
+//$--colors: (
+//        "warning": (
+//                "base": green,
+//        ),
+//);
+
+$--font-size: (
+        'extra-large': 22px,
+        'large': 20px,
+        'medium': 18px,
+        'base': 16px,
+        'small': 14px,
+        'extra-small': 12px,
+);
+
+// You should use them in scss, because we calculate it by sass.
+// comment next lines to use default color
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+  // do not use same name, it will override.
+  $font-size: $--font-size,
+  //$colors: $--colors,
+  $button-padding-horizontal: ("default": 50px),
+);
+
+@use "./dark.scss";

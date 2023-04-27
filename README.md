@@ -1,6 +1,6 @@
 # PM Tool ⚙️
 
-- [Frontend app](https://github.com/kostyamm/pm-tool/tree/main/client) Vue 3 / Vite / Socket.io (client)
+- [Frontend app](https://github.com/kostyamm/pm-tool/tree/main/client) Vue 3 / Vite / Element Plus UI / Socket.io (client)
 - [Backend app](https://github.com/kostyamm/pm-tool/tree/main/server) Express / MongoDB (mongoose) / Socket.io (server)
 
 ## About 📝

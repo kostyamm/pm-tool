@@ -1,23 +1,15 @@
-@import "variables";
+.el-row {
+  margin-top: -6px;
+  margin-bottom: -6px;
 
-.container {
-  min-width: 320px;
-  max-width: $max-width;
-  margin: 0 auto;
-  padding: 0 12px;
-}
-
-.overflow-hidden {
-  overflow-y: hidden;
-}
-
-.form {
-  justify-content: center;
-  flex-direction: column;
-
-  & > *:not(:last-child) {
-    margin-bottom: 24px;
+  &:not(:last-child) {
+    padding-bottom: 12px;
   }
+}
+
+.el-col {
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
 h1 {

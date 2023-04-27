@@ -1,8 +1,8 @@
 <template>
-    <div class="error">
+    <el-empty class="error" description="404">
         <h1 class="text-h1">Page Not Found</h1>
-        <router-link to="/">Go to your account</router-link>
-    </div>
+        <el-button @click="$router.push('/')" type="primary" size="large">Back to homepage</el-button>
+    </el-empty>
 </template>
 
 <style lang="scss" scoped>
