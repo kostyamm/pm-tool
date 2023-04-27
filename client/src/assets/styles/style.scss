@@ -1,30 +1,31 @@
-@import 'ui/button';
-@import 'ui/link';
+@use "element-plus/theme-chalk/el-dialog.css"; // to block scroll when opening el-drawer
+@use "element-plus/theme-chalk/src/dark/css-vars.scss" as *;
 
-@import 'scrollbar';
-@import 'variables';
-@import 'typography';
-@import 'common';
+@import "variables";
+@import "typography";
+@import "common";
 
-body {
+:root {
   font-family: Montserrat, Inter, Avenir, Helvetica, Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  overflow-x: hidden;
-
-  font-style: normal;
+  line-height: 24px;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 22px;
-
-  color: $white;
-  background-color: $dark;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
 
-  //-webkit-font-smoothing: antialiased;
-  //-moz-osx-font-smoothing: grayscale;
-  //-webkit-text-size-adjust: 100%;
+body {
+  margin: 0;
+}
+
+#app {
+  overflow-x: hidden;
+  min-width: $min-width;
+}
+
+a {
+  text-decoration: none;
 }

@@ -1,12 +1,8 @@
-import store from '../store/index.js'
+import { ElNotification } from 'element-plus'
 
 export const useNotice = () => {
-    const baseNotice = (data, status) => {
-        store.dispatch('createNotice', { ...data, id: Date.now(), status })
-    }
-
-    const successNotice = data => baseNotice(data, 'success')
-    const errorNotice = data => baseNotice(data, 'error')
+    const successNotice = data => ElNotification({ type: 'success', ...data })
+    const errorNotice = data => ElNotification({ type: 'error', ...data })
 
     return {
         errorNotice,

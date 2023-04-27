@@ -1,88 +1,62 @@
-<script>
+<script setup>
 import { useStore } from 'vuex'
 import { computed, onMounted, ref } from 'vue'
-import Field from '../../components/UI/Field.vue'
 
-export default {
-    name: "Rooms",
-    components: { Field },
-    setup() {
-        const store = useStore()
-        const roomName = ref(null)
+const store = useStore()
+const roomName = ref(null)
 
-        const rooms = computed(() => store.getters['user/rooms'])
-        const guestRooms = computed(() => store.getters['user/guestRooms'])
+const rooms = computed(() => store.getters['user/rooms'])
+const guestRooms = computed(() => store.getters['user/guestRooms'])
 
-        const onCreateRoom = () => {
-            store.dispatch('user/createRoom', { name: roomName.value })
-            roomName.value = null
-        }
-
-        const onRemoveRoom = (id) => store.dispatch('user/removeRoom', id)
-
-        onMounted(async () => await store.dispatch('user/fetchRooms'))
-
-        return { rooms, guestRooms, roomName, onCreateRoom, onRemoveRoom }
-    },
+const onCreateRoom = () => {
+    store.dispatch('user/createRoom', { name: roomName.value })
+    roomName.value = null
 }
+
+const onRemoveRoom = (id) => store.dispatch('user/removeRoom', id)
+
+onMounted(async () => await store.dispatch('user/fetchRooms'))
 </script>
 
 <template>
-    <div class="rooms">
-        <div>
-            <h1 class="text-h2">Your rooms</h1>
-            <ul v-for="room in rooms" :key="room._id">
-                <li class="text-p rooms__item">
-                    <router-link :to='`/room/${room._id}`'>{{ room.name }}</router-link>
-                    <mdi-close @click="onRemoveRoom(room._id)" />
-                </li>
-            </ul>
-            <h1 class="text-h2">Where are you a guest</h1>
-            <ul v-for="room in guestRooms" :key="room._id">
-                <li class="text-p rooms__item">
-                    <router-link :to='`/room/${room._id}`'>{{ room.name }}</router-link>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <h1 class="text-h2">Create room</h1>
-            <div class="form">
-                <Field v-model="roomName" label="Room name" placeholder="Enter room name ..." @keypress.enter="onCreateRoom" />
-                <button @click="onCreateRoom" class="button-large button-icon-right">
-                    Create
-                    <mdi-card-plus-outline />
-                </button>
-            </div>
-        </div>
-    </div>
+    <h1 class="text-h2">Create room</h1>
+    <el-input
+        v-model="roomName"
+        @keypress.enter="onCreateRoom"
+        placeholder="Enter room name"
+        size="large"
+    >
+        <template #append>
+            <el-button @click="onCreateRoom" type="primary">Create</el-button>
+        </template>
+    </el-input>
+
+    <h1 class="text-h2">Your rooms</h1>
+    <el-table :data="rooms">
+        <el-table-column prop="name" label="Name" width="250" show-overflow-tooltip />
+        <el-table-column prop="_id" label="Link" show-overflow-tooltip>
+            <template #default="{ row }">
+                <el-button link @click="$router.push(`/room/${row._id}`)">
+                    {{ row._id }}
+                </el-button>
+            </template>
+        </el-table-column>
+        <el-table-column label="Action" width="120">
+            <template #default="{ row }">
+                <el-button link @click="onRemoveRoom(row._id)" type="danger">Remove</el-button>
+            </template>
+        </el-table-column>
+    </el-table>
+
+    <h1 class="text-h2">Guest's rooms</h1>
+    <el-table :data="guestRooms">
+        <el-table-column prop="name" label="Name" width="250" show-overflow-tooltip />
+        <el-table-column prop="_id" label="Link" show-overflow-tooltip>
+            <template #default="{ row }">
+                <el-button link @click="$router.push(`/room/${row._id}`)">
+                    {{ row._id }}
+                </el-button>
+            </template>
+        </el-table-column>
+    </el-table>
 </template>
-
-<style lang="scss" scoped>
-@import "../../assets/styles/variables";
-.rooms {
-    display: flex;
-    flex-wrap: wrap;
-
-    & > * {
-        min-width: 320px;
-        flex: 1;
-    }
-
-    &__item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 14px;
-
-        svg {
-            font-size: 8px;
-            margin-left: 8px;
-            border: 1px solid $white;
-            border-radius: $border-radius;
-
-            &:hover {
-                cursor: pointer;
-            }
-        }
-    }
-}
-</style>

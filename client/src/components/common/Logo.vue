@@ -1,23 +1,14 @@
-<script>
+<script setup>
 import logo from '../../assets/images/logo.svg'
-import { useRouter } from 'vue-router'
 
-export default {
-    name: "Logo",
-    props: {
-        text: String
-    },
-    setup() {
-        const router = useRouter()
-
-        return { logo, router }
-    },
-}
+const { text } = defineProps({
+    text: String
+})
 </script>
 
 <template>
     <div class="logo">
-        <img :src="logo" @click="router.push('/')" alt="PM Tool" title="Pm Tool" />
+        <img :src="logo" @click="$router.push('/')" alt="PM Tool" title="Pm Tool" />
         <router-link to="/" v-if="text" class="logo__text text-h4">{{ text }}</router-link>
     </div>
 </template>

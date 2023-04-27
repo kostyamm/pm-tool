@@ -38,7 +38,7 @@ export const auth = async () => {
     return processingResponse(response)
 }
 
-// Rooms
+// User rooms
 export const fetchUserRooms = async () => {
     const { data, error } = await API.get('/user/rooms')
 
