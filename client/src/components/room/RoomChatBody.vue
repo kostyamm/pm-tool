@@ -1,13 +1,13 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
-import { useStore } from 'vuex'
+import { ref, watch } from 'vue'
+import { useUserStore } from '../../stores/UserStore.js'
+import { useRoomStore } from '../../stores/RoomStore.js'
+import { storeToRefs } from 'pinia'
 
-const store = useStore()
+const { user } = storeToRefs(useUserStore())
+const { messages } = storeToRefs(useRoomStore())
 
 const messageEl = ref()
-
-const user = computed(() => store.getters['user/user'])
-const messages = computed(() => store.getters['room/messages'])
 
 watch(() => messages, () => {
     setTimeout(() => {
@@ -15,9 +15,9 @@ watch(() => messages, () => {
             return
         }
 
-        const messages = messageEl.value
-        const lastIndex = messages.length - 1
-        messages[lastIndex]?.scrollIntoView({ behavior: "smooth" })
+        const messagesBlock = messageEl.value
+        const lastIndex = messagesBlock.length - 1
+        messagesBlock[lastIndex]?.scrollIntoView({ behavior: "smooth" })
     })
 }, { deep: true, immediate: true })
 </script>

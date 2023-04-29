@@ -1,15 +1,16 @@
 <script setup>
 import { reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useStore } from 'vuex'
 import { useNotice } from '../hooks/useNotice.js'
+import { useUserStore } from '../stores/UserStore.js'
 
 const isRegistration = ref(true)
 const emailEl = ref()
 const formData = reactive({})
 
 const { errorNotice } = useNotice()
-const store = useStore()
+const { signIn, signUp } = useUserStore()
+
 const route = useRoute()
 const router = useRouter()
 
@@ -18,13 +19,11 @@ const submit = async () => {
     const password = userData.password
     const isInvalidPassword = !password || !confirmPassword || password !== confirmPassword
 
-    const requestType = !isRegistration.value ? 'signIn' : 'signUp'
-
     if (isRegistration.value && isInvalidPassword) {
         return errorNotice({ message: 'Password or password confirmation is invalid' })
     }
 
-    const result = await store.dispatch(`user/${requestType}`, userData)
+    const result = await (!isRegistration.value ? signIn : signUp)(userData)
 
     if (result) {
         router.push(route.query.to || '/')

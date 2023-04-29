@@ -1,20 +1,20 @@
 <script setup>
-import { computed } from 'vue'
-import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/UserStore.js'
+import { storeToRefs } from 'pinia'
 
 const options = [
     { label: 'Account', to: '/user' },
     { label: 'Rooms', to: '/user/rooms' },
 ]
 
+const UserStore = useUserStore()
+const { isAuth, user } = storeToRefs(UserStore)
+
 const router = useRouter()
-const store = useStore()
-const isAuth = computed(() => store.getters['user/isAuth'])
-const user = computed(() => store.getters['user/user'])
 
 const logOut = () => {
-    store.dispatch('user/logout')
+    UserStore.logout()
     router.push('/login')
 }
 </script>

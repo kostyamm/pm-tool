@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import store from './store/index.js'
+import { useUserStore } from './stores/UserStore.js'
 import Cookies from 'js-cookie'
 
 // Auto generates routes from vue files under ./pages
@@ -38,6 +38,8 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from) => {
+    const UserStore = useUserStore()
+
     const isRequiredAuth = to => to.matched.some(record => record.meta.requiredAuth)
     const token = Cookies.get('token')
 
@@ -45,11 +47,11 @@ router.beforeEach(async (to, from) => {
         return { path: '/user' }
     }
 
-    if (token && !store.getters['user/isAuth']) {
-        await store.dispatch('user/checkAuth')
+    if (token && !UserStore.isAuth) {
+        await UserStore.checkAuth()
     }
 
-    if (isRequiredAuth(to) && !store.getters['user/isAuth']) {
+    if (isRequiredAuth(to) && !UserStore.isAuth) {
         return { path: '/login', query: { to: to.fullPath } }
     }
 })
