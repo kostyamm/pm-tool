@@ -13,7 +13,7 @@ Yes, of course, business logic needs to be improved here, but the foundation is 
 
 - ``npm ci && npm run dev``
 
-## Screenshots 🤳
+## Screenshots 🤳 [from demo-beta branch](https://github.com/kostyamm/pm-tool/tree/demo-beta)
 ### Login
 ![Login](client/src/assets/screenshots/screenshot-login.png)
 ### User rooms
