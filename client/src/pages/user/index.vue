@@ -7,6 +7,7 @@ const { user } = storeToRefs(useUserStore())
 
 <template>
     <el-descriptions
+        v-if="user"
         :title="user.name"
         :column="1"
         border

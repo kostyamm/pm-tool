@@ -14,13 +14,13 @@ const { isAuth, user } = storeToRefs(UserStore)
 const router = useRouter()
 
 const logOut = () => {
-    UserStore.logout()
     router.push('/login')
+        .then(() => UserStore.logout())
 }
 </script>
 
 <template>
-    <el-button-group v-if="!isAuth">
+    <el-button-group v-if="!isAuth && !user">
         <el-button @click="$router.push('/login')" type="primary">Sing in</el-button>
         <el-button @click="$router.push({ path: '/login', query: {registration: 'true'} })">Sing up</el-button>
     </el-button-group>

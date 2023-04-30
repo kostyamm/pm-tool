@@ -13,12 +13,12 @@ export const useRoomStore = defineStore('RoomStore', {
         isOwner: ({ room }) => {
             const UserStore = useUserStore()
 
-            return UserStore.user.id === room?.owner?._id
+            return UserStore.user?.id === room?.owner?._id
         },
         hasGuest: ({ room }) => {
             const UserStore = useUserStore()
 
-            return room?.guests.some(({ _id }) => _id === UserStore.user.id)
+            return room?.guests.some(({ _id }) => _id === UserStore.user?.id)
         },
     },
     actions: {
