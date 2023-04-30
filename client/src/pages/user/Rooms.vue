@@ -1,21 +1,20 @@
 <script setup>
-import { useStore } from 'vuex'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useUserStore } from '../../stores/UserStore.js'
+import { storeToRefs } from 'pinia'
 
-const store = useStore()
+const UserStore = useUserStore()
+const { rooms, guestRooms } = storeToRefs(UserStore)
+const { createRoom, removeRoom, fetchRooms } = UserStore
+
 const roomName = ref(null)
 
-const rooms = computed(() => store.getters['user/rooms'])
-const guestRooms = computed(() => store.getters['user/guestRooms'])
-
 const onCreateRoom = () => {
-    store.dispatch('user/createRoom', { name: roomName.value })
+    createRoom({ name: roomName.value })
     roomName.value = null
 }
 
-const onRemoveRoom = (id) => store.dispatch('user/removeRoom', id)
-
-onMounted(async () => await store.dispatch('user/fetchRooms'))
+onMounted(async () => await fetchRooms())
 </script>
 
 <template>
@@ -43,7 +42,7 @@ onMounted(async () => await store.dispatch('user/fetchRooms'))
         </el-table-column>
         <el-table-column label="Action" width="120">
             <template #default="{ row }">
-                <el-button link @click="onRemoveRoom(row._id)" type="danger">Remove</el-button>
+                <el-button link @click="removeRoom(row._id)" type="danger">Remove</el-button>
             </template>
         </el-table-column>
     </el-table>

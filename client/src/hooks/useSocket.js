@@ -1,22 +1,24 @@
 import { io } from 'socket.io-client'
-import { computed } from 'vue'
-import { useStore } from 'vuex'
+import { useRoomStore } from '../stores/RoomStore.js'
+import { useUserStore } from '../stores/UserStore'
+import { storeToRefs } from 'pinia'
 
 export const useSocket = (roomId) => {
-    const store = useStore()
-    const { value: user } = computed(() => store.getters['user/user'])
+    const RoomStore = useRoomStore()
+
+    const { user } = storeToRefs(useUserStore())
 
     const socket = io(import.meta.env.VITE_SOCKET_URL, {
         query: {
             roomId,
-            userId: user.id,
-            userName: user.name,
+            userId: user.value.id,
+            userName: user.value.name,
         },
     })
 
-    socket.on('updateUsers', data => data && store.commit('room/setUsers', data))
-    socket.on('updateTasks', data => data && store.commit('room/setTasks', data))
-    socket.on('message', data => data && store.commit('room/setMessage', data))
+    socket.on('updateUsers', users => RoomStore.users = users)
+    socket.on('updateTasks', tasks => RoomStore.tasks = tasks)
+    socket.on('message', message => RoomStore.messages.push(message))
 
     const emitVote = vote => socket.emit('vote', vote)
     const emitTask = task => socket.emit('addTask', { url: task })

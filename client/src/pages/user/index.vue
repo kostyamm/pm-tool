@@ -1,9 +1,8 @@
 <script setup>
-import { computed } from 'vue'
-import { useStore } from 'vuex'
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '../../stores/UserStore.js'
 
-const store = useStore()
-const user = computed(() => store.getters['user/user'])
+const { user } = storeToRefs(useUserStore())
 </script>
 
 <template>

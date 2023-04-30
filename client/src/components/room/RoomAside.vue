@@ -1,7 +1,8 @@
 <script setup>
-import { computed, ref } from 'vue'
-import { useStore } from 'vuex'
+import { ref } from 'vue'
 import RoomChat from '../../components/room/RoomChat.vue'
+import { useRoomStore } from '../../stores/RoomStore.js'
+import { storeToRefs } from 'pinia'
 
 const { emitMessage } = defineProps({
     emitMessage: {
@@ -10,12 +11,9 @@ const { emitMessage } = defineProps({
     }
 })
 
-const store = useStore()
+const { users, room } = storeToRefs(useRoomStore())
 
 const isOpen = ref(false)
-
-const roomUsers = computed(() => store.getters['room/users'])
-const roomName = computed(() => store.getters['room/room'].name)
 </script>
 
 <template>
@@ -24,7 +22,7 @@ const roomName = computed(() => store.getters['room/room'].name)
     <el-row>
         <el-col>
             <el-text truncated>
-                <h2 class="text-h4">Room name: {{ roomName }}</h2>
+                <h2 class="text-h4">Room name: {{ room.name }}</h2>
             </el-text>
         </el-col>
 
@@ -37,7 +35,7 @@ const roomName = computed(() => store.getters['room/room'].name)
         <el-col>
             <h2 class="text-h4">User connected:</h2>
         </el-col>
-        <el-col v-for="user of roomUsers" :key="user.userId">
+        <el-col v-for="user of users" :key="user.userId">
             <el-text truncated class="text-p">
                 {{ user.userName }} {{ user.vote && `[${user.vote}]` }}
             </el-text>

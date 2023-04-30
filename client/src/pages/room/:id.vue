@@ -1,35 +1,37 @@
 <script setup>
-import { computed, onMounted, onUnmounted } from 'vue'
-import { useStore } from 'vuex'
+import { onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useSocket } from '../../hooks/useSocket.js'
+import { useRoomStore } from '../../stores/RoomStore.js'
+import { storeToRefs } from 'pinia'
 import RoomVote from '../../components/room/RoomVote.vue'
 import RoomAside from '../../components/room/RoomAside.vue'
 import RoomTasks from '../../components/room/RoomTasks.vue'
 
-const store = useStore()
-const route = useRoute()
-const { emitVote, emitTask, emitSkipTask, emitMessage, disconnectSocket } = useSocket(route.params.id)
+const RoomStore = useRoomStore()
+const { isOwner, hasGuest, room } = storeToRefs(useRoomStore())
+const { fetchRoomById, addGuest } = RoomStore
 
-const isOwner = computed(() => store.getters['room/isOwner'])
-const hasGuest = computed(() => store.getters['room/hasGuest'])
-const room = computed(() => store.getters['room/room'])
+const { params } = useRoute()
+const paramsId = params.id
+
+const { emitVote, emitTask, emitSkipTask, emitMessage, disconnectSocket } = useSocket(paramsId)
 
 onMounted(async () => {
-    await store.dispatch('room/fetchRoomById', route.params.id)
+    await fetchRoomById(paramsId)
 
     if (!room.value) {
         return
     }
 
     if (!isOwner.value && !hasGuest.value) {
-        store.dispatch('room/addGuest', route.params.id)
+        addGuest(paramsId)
     }
 })
 
 onUnmounted(() => {
     disconnectSocket()
-    store.commit('room/resetState')
+    RoomStore.$reset()
 })
 </script>
 

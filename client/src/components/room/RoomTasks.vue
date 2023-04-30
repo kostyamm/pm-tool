@@ -1,10 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useStore } from 'vuex'
+import { useRoomStore } from '../../stores/RoomStore.js'
+import { storeToRefs } from 'pinia'
 
 const emit = defineEmits(['addTask', 'skipTask'])
 
-const store = useStore()
+const { isOwner, tasks, users } = storeToRefs(useRoomStore())
 
 const task = ref(null)
 
@@ -17,11 +18,7 @@ const openTask = (url) => window.open(url, '_blank')
 
 const skipTask = () => emit('skipTask')
 
-const isOwner = computed(() => store.getters['room/isOwner'])
-const roomTasks = computed(() => store.getters['room/tasks'])
-const roomUsers = computed(() => store.getters['room/users'])
-
-const isVoted = computed(() => roomUsers.value.every(({ vote }) => vote))
+const isVoted = computed(() => users.value.every(({ vote }) => vote))
 </script>
 
 <template>
@@ -37,7 +34,7 @@ const isVoted = computed(() => roomUsers.value.every(({ vote }) => vote))
         </el-button>
     </template>
 
-    <el-table :data="roomTasks">
+    <el-table :data="tasks">
         <el-table-column prop="active" label="Active" width="80">
             <template #default="{ row }">
                 {{ row.active ? 'Active' : '' }}

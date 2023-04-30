@@ -1,15 +1,14 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { useStore } from 'vuex'
+import { storeToRefs } from 'pinia'
+import { useRoomStore } from '../../stores/RoomStore.js'
 
 const emit = defineEmits(['onVote'])
 
 const VOTE_VALUES = [0.5, 1, 2, 3, 5, 7]
-const store = useStore()
+const { tasks } = storeToRefs(useRoomStore())
 
 const vote = ref(null)
-
-const tasks = computed(() => store.getters['room/tasks'])
 
 const isEndVoting = computed(() => tasks.value.every(({ vote }) => vote))
 const isEmptyTasks = computed(() => !tasks.value.length)
