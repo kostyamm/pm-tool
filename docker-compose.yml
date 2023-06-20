@@ -1,0 +1,18 @@
+version: '3.9'
+services:
+  client:
+    env_file: ./client/.env
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: client
+    ports:
+      - '3000:3000'
+  server:
+    env_file: ./server/.env
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: server
+    ports:
+      - '8000:8000'
